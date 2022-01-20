@@ -34,3 +34,5 @@ dynPres = 134.6*lb/ft^2;
 xCG = 0.32; % [1/MAC]
 alpha0 = 2.7*deg;
 theta0 = alpha0;
+u0 = tas*cos(alpha0);
+w0 = tas*sin(alpha0);
