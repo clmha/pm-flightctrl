@@ -36,3 +36,37 @@ alpha0 = 2.7*deg;
 theta0 = alpha0;
 u0 = tas*cos(alpha0);
 w0 = tas*sin(alpha0);
+
+%% Longitudinal Aerodynamic Coefficients (Max Weight)
+% Steady State
+CL_1 = 0.41;
+CD_1 = 0.0335;
+Cm_1 = 0;
+CT_X1 = 0.0335;
+Cm_T1 = 0;
+
+% Stability Derivatives
+CD_0 = 0.0216;
+CD_u = 0.104;
+CD_alpha = 0.30;
+CT_Xu = -0.07;
+CL_0 = 0.13;
+CL_u = 0.40;
+CL_alpha = 5.84;
+CL_alphaRate = 2.2;
+CL_q = 4.7;
+Cm_0 = 0.050;
+Cm_u = 0.050;
+Cm_alpha = -0.64;
+Cm_alphaRate = -6.7;
+Cm_q = -15.5;
+Cm_Tu = -0.003;
+Cm_Talpha = 0;
+
+% Control Derivatives
+CD_elv = 0;
+CD_hstab = 0;
+CL_elv = 0.46;
+CL_hstab = 0.94;
+Cm_elv = -1.24;
+Cm_hstab = -2.5;
