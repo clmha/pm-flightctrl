@@ -36,6 +36,8 @@ alpha0 = 2.7*deg;
 theta0 = alpha0;
 u0 = tas*cos(alpha0);
 w0 = tas*sin(alpha0);
+elv0 = 0;
+hstab0 = 0;
 
 %% Longitudinal Aerodynamic Coefficients (Max Weight)
 % Steady State
