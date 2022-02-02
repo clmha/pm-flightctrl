@@ -18,6 +18,7 @@ g = 9.81*m/s^2;
 
 % Geometric Data
 mac = 7*ft; % Mean Aerodynamic Cord (MAC)
+S = 230*ft^2; % Wing surface
 
 %% Mass and Inertial Data (Max Weight)
 m = 13000*lb;
