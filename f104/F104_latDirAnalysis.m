@@ -26,7 +26,7 @@ lRud =  [ 5.35       41.5        57.6]; % (1/s^2)
 nRud =  [-0.923     -7.070      -8.720]; % (1/s^2)
 
 %% Open Loop A/C Model
-acMdl = {};
+acMdlz = {};
 for fCondIdx = 1:numel(alt)
     A = [
         yV(fCondIdx)    sin(trimPitchAttitude(fCondIdx))    -cos(trimPitchAttitude(fCondIdx))   -g(fCondIdx)*cos(trimPitchAttitude(fCondIdx))/tas(fCondIdx)
@@ -42,11 +42,16 @@ for fCondIdx = 1:numel(alt)
         ];
     C = eye(size(A));
     D = zeros(size(B));
-    acMdl{end+1} = ss(A, B, C, D, ...
+    acMdlz{fCondIdx} = ss(A, B, C, D, ...
         'StateName', {'ss', 'rollRate', 'yawRate', 'roll'}, ..., ...
         'OutputUnit', {'°', '°/s', '°/s', '°'}, ...
         'InputName', {'ail', 'rud'}, ...
         'InputUnit', {'°', '°'}, ...
         'OutputName', {'ss', 'rollRate', 'yawRate', 'roll'}, ...
         'OutputUnit', {'°', '°/s', '°/s', '°'});
+
+    %%
+    % The response transfer functions at each flight condition are:
+    disp(['Mach = ' num2str(trimMach(fCondIdx)) ':']);
+    zpk(acMdlz{fCondIdx})
 end
