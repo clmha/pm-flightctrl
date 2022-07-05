@@ -14,10 +14,10 @@ tas = trimMach.*speedOfSound; % True airspeed (ft/s)
 yV =    [-0.178     -0.452      -0.791]; % (1/s)
 lSs =   [-20.9      -146.0      -363.0]; % (1/s^2)
 nSs =   [ 2.68       13.60       42.70]; % (1/s^2)
-lRoll = [-1.38      -4.64       -7.12]; % (1/s)
-nRoll = [-0.0993    -0.188      -0.341]; % (1/s)
-lYaw =  [ 1.16       3.67        7.17]; % (1/s)
-nYaw =  [-0.157     -0.498      -1.06]; % (1/s)
+lRollRate = [-1.38      -4.64       -7.12]; % (1/s)
+nRollRate = [-0.0993    -0.188      -0.341]; % (1/s)
+lYawRate =  [ 1.16       3.67        7.17]; % (1/s)
+nYawRate =  [-0.157     -0.498      -1.06]; % (1/s)
 yAil =  [ 0          0           0]; % (1/s)
 lAil =  [ 4.76       49.6        81.5]; % (1/s^2)
 nAil =  [ 0.266      3.510       6.500]; % (1/s^2)
@@ -26,11 +26,12 @@ lRud =  [ 5.35       41.5        57.6]; % (1/s^2)
 nRud =  [-0.923     -7.070      -8.720]; % (1/s^2)
 
 %% Open Loop A/C Model
+acMdl = {};
 for fCondIdx = 1:numel(alt)
     A = [
         yV(fCondIdx)    sin(trimPitchAttitude(fCondIdx))    -cos(trimPitchAttitude(fCondIdx))   -g(fCondIdx)*cos(trimPitchAttitude(fCondIdx))/tas(fCondIdx)
-        lSs(fCondIdx)   lRoll(fCondIdx)                      lYaw(fCondIdx)                      0
-        nSs(fCondIdx)   nRoll(fCondIdx)                      nYaw(fCondIdx)                      0
+        lSs(fCondIdx)   lRollRate(fCondIdx)                      lYawRate(fCondIdx)                      0
+        nSs(fCondIdx)   nRollRate(fCondIdx)                      nYawRate(fCondIdx)                      0
         0               1                                    tan(trimPitchAttitude(fCondIdx))    0
         ];
     B = [
@@ -39,4 +40,13 @@ for fCondIdx = 1:numel(alt)
         nAil(fCondIdx)  nRud(fCondIdx)
         0               0
         ];
+    C = eye(size(A));
+    D = zeros(size(B));
+    acMdl{end+1} = ss(A, B, C, D, ...
+        'StateName', {'ss', 'rollRate', 'yawRate', 'roll'}, ..., ...
+        'OutputUnit', {'°', '°/s', '°/s', '°'}, ...
+        'InputName', {'ail', 'rud'}, ...
+        'InputUnit', {'°', '°'}, ...
+        'OutputName', {'ss', 'rollRate', 'yawRate', 'roll'}, ...
+        'OutputUnit', {'°', '°/s', '°/s', '°'});
 end
