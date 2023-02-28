@@ -55,3 +55,52 @@ for fCondIdx = 1:numel(alt)
     disp(['Mach = ' num2str(trimMach(fCondIdx)) ':']);
     zpk(acMdlz{fCondIdx})
 end
+
+%% Open Loop Simulation
+% To determine a simulation sampling time, we first look for the fastest
+% pole among all the open loop A/C models:
+maxPoleFreq = max(imag(eig([acMdlz{:}]))); % (rad/s)
+maxPoleFreq = maxPoleFreq/2/pi(); % (Hz)
+minPolePeriod = 1/maxPoleFreq % (s)
+
+%%
+% According to the period of the fastest pole, we select the following
+% sampling time:
+dT = 0.01 % (s)
+assert(dT < 2*minPolePeriod, ['Sampling time must be smaller than ' ...
+    'twice the period of the fastest pole.']);
+
+%%
+% We can now simulation the A/C with aileron and rudder inputs.
+t = 0:dT:10; % (s)
+
+ail = zeros(size(t));
+ail(t > 1) = 1;
+ail(t > 2) = 0;
+
+rud = zeros(size(t));
+rud(t > 1) = -.5;
+rud(t > 2) = 0;
+
+U = [ail(:) rud(:)];
+for fCondIdx = 1:numel(alt)
+    acMdl = acMdlz{fCondIdx};
+    y = lsim(acMdl, U, t);
+
+    figure();
+    subplot(5, 1, 1);
+    plot(t, ail, t, rud);
+    title(sprintf("Flight Cond. #%d", fCondIdx));
+    ylabel('Control Surfaces (°)');
+    legend('Aileron', 'Rudder');
+    grid();
+
+    for iOutput = 1:numel(acMdl.OutputName)
+        subplot(5, 1, iOutput+1);
+        plot(t, y(:, iOutput));
+        ylabel(sprintf("%s (%s)", acMdl.OutputName{iOutput}, ...
+            acMdl.OutputUnit{iOutput}));
+        grid();
+    end
+    xlabel('t (s)');
+end
