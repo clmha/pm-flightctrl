@@ -76,11 +76,11 @@ t = 0:dT:10; % (s)
 
 ail = zeros(size(t));
 ail(t > 1) = 1;
-ail(t > 2) = 0;
+ail(t > 5) = 0;
 
 rud = zeros(size(t));
-rud(t > 1) = -.5;
-rud(t > 2) = 0;
+rud(t > 1) = 0.25;
+rud(t > 5) = 0;
 
 U = [ail(:) rud(:)];
 for fCondIdx = 1:numel(alt)
