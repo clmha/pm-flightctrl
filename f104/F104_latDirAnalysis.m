@@ -29,7 +29,7 @@ nRud =  [-0.923     -7.070      -8.720]; % (1/s^2)
 acMdlz = {};
 for fCondIdx = 1:numel(alt)
     A = [
-        yV(fCondIdx)    sin(trimPitchAttitude(fCondIdx))    -cos(trimPitchAttitude(fCondIdx))   -g(fCondIdx)*cos(trimPitchAttitude(fCondIdx))/tas(fCondIdx)
+        yV(fCondIdx)    sind(trimPitchAttitude(fCondIdx))    -cosd(trimPitchAttitude(fCondIdx))   g(fCondIdx)*cosd(trimPitchAttitude(fCondIdx))/tas(fCondIdx)
         lSs(fCondIdx)   lRollRate(fCondIdx)                      lYawRate(fCondIdx)                      0
         nSs(fCondIdx)   nRollRate(fCondIdx)                      nYawRate(fCondIdx)                      0
         0               1                                    tan(trimPitchAttitude(fCondIdx))    0
